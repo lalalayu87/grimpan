@@ -1,3 +1,4 @@
+const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("fill-btn");
 const destoryBtn = document.getElementById("destory-btn");
 const eraserBtn = document.getElementById("eraser-btn");
@@ -103,6 +104,18 @@ function onEraserClick() {
   modeBtn.innerText = "Fill";
 }
 
+function onFileChange(event) {
+  const file = event.target.files[0];
+  const url = URL.createObjectURL(file); // 브라우저의 메모리에 저장된 거임
+  const image = new Image();
+  // <img src=""/> 와 동일
+  image.src = url;
+  image.onload = function () {
+    ctx.drawImage(image, 0, 0, CANVANS_WIDTH, CANVANS_HEIGHT);
+    fileInput.value = null;
+  };
+}
+
 // canvas.addEventListener("click", onClick);
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", onMouseDown);
@@ -118,3 +131,4 @@ colorOption.forEach((color) => color.addEventListener("click", onColorClick));
 modeBtn.addEventListener("click", onModeClick);
 destoryBtn.addEventListener("click", onDestoryClick);
 eraserBtn.addEventListener("click", onEraserClick);
+fileInput.addEventListener("change", onFileChange);

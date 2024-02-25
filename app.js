@@ -1,3 +1,5 @@
+const saveBtn = document.getElementById("save");
+const textInput = document.getElementById("text");
 const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("fill-btn");
 const destoryBtn = document.getElementById("destory-btn");
@@ -9,9 +11,11 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const CANVANS_WIDTH = 800;
 const CANVANS_HEIGHT = 800;
+
 canvas.width = CANVANS_WIDTH;
 canvas.height = CANVANS_HEIGHT;
 ctx.lineWidth = lineWidth.value;
+ctx.lineCap = "round";
 
 // ctx.moveTo(0, 0);
 // 선의 끝난 시점에서 연결되는 선이 그려짐
@@ -116,7 +120,28 @@ function onFileChange(event) {
   };
 }
 
+function onDobleClick(event) {
+  const text = textInput.value;
+  if (text !== "") {
+    ctx.save();
+    ctx.lineWidth = 1;
+    ctx.font = "48px selif";
+    ctx.strokeText(text, event.offsetX, event.offsetY);
+    // ctx.fillText(text, event.offsetX, event.offsetY);
+    ctx.restore();
+  }
+}
+
+function onSaveClick() {
+  const url = canvas.toDataURL();
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "myDrawing.png";
+  a.click();
+}
+
 // canvas.addEventListener("click", onClick);
+canvas.addEventListener("dblclick", onDobleClick);
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", onMouseDown);
 canvas.addEventListener("mouseup", cancelPainting);
@@ -132,3 +157,4 @@ modeBtn.addEventListener("click", onModeClick);
 destoryBtn.addEventListener("click", onDestoryClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
+saveBtn.addEventListener("click", onSaveClick);
